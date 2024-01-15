@@ -3,9 +3,12 @@ package com.example.mysecondapp;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -17,6 +20,7 @@ public class OnBoardingActivity extends AppCompatActivity {
 
     Button btn;
 
+    Animation animation;
     SlideAdapter slideAdapter;
 
     TextView[] dots;
@@ -41,6 +45,13 @@ public class OnBoardingActivity extends AppCompatActivity {
         slideAdapter = new SlideAdapter(this);
 
         viewPager.setAdapter(slideAdapter);
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(OnBoardingActivity.this,RegistrationActivity.class));
+            }
+        });
     }
 
     public void addDots(int position){
@@ -77,6 +88,8 @@ public class OnBoardingActivity extends AppCompatActivity {
             }else  if(position == 1){
                 btn.setVisibility(View.INVISIBLE);
             }else{
+                animation = AnimationUtils.loadAnimation(OnBoardingActivity.this,R.anim.slide_animation);
+                btn.setAnimation(animation);
                 btn.setVisibility(View.VISIBLE);
             }
         }
