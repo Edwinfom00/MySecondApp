@@ -5,6 +5,8 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
 import android.text.Html;
+import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -12,6 +14,8 @@ public class OnBoardingActivity extends AppCompatActivity {
 
     ViewPager viewPager;
     LinearLayout dotsLayout;
+
+    Button btn;
 
     SlideAdapter slideAdapter;
 
@@ -24,6 +28,11 @@ public class OnBoardingActivity extends AppCompatActivity {
 
         viewPager = findViewById(R.id.slider);
         dotsLayout = findViewById(R.id.dots);
+        btn = findViewById(R.id.get_started_btn);
+
+
+
+        viewPager.addOnPageChangeListener(changeListener);
 
 
         addDots(0);
@@ -51,4 +60,30 @@ public class OnBoardingActivity extends AppCompatActivity {
         }
 
     }
+
+    ViewPager.OnPageChangeListener changeListener = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+
+            addDots(position);
+
+            if(position == 0){
+                btn.setVisibility(View.INVISIBLE);
+            }else  if(position == 1){
+                btn.setVisibility(View.INVISIBLE);
+            }else{
+                btn.setVisibility(View.VISIBLE);
+            }
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
+    };
 }
