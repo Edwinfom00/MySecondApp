@@ -10,13 +10,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.denzcoskun.imageslider.ImageSlider;
+import com.denzcoskun.imageslider.animations.Toss;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.mysecondapp.R;
 import com.example.mysecondapp.adapters.CategoryAdapter;
+import com.example.mysecondapp.adapters.NewProductsAdapter;
 import com.example.mysecondapp.models.CategoryModel;
+import com.example.mysecondapp.models.NewProductsModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -32,12 +36,17 @@ public class HomeFragment extends Fragment {
 
     //Category Recyclerview
 
-    RecyclerView catRecyclerview;
+    RecyclerView catRecyclerview, newProductRecyclerview;
     CategoryAdapter categoryAdapter;
     List<CategoryModel> categoryModelList;
 
-    //Fire Store
+    //New Product Recyclerview
 
+     NewProductsAdapter newProductsAdapter;
+
+     List<NewProductsModel> newProductsModelList;
+
+    //Fire Store
     FirebaseFirestore db;
 
 
@@ -52,8 +61,11 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_home, container, false);
+
+
         catRecyclerview = root.findViewById(R.id.rec_category);
 
+        newProductRecyclerview = root.findViewById(R.id.new_product_rec);
         db = FirebaseFirestore.getInstance();
 
         ImageSlider imageSlider = root.findViewById(R.id.image_slider);
@@ -85,10 +97,40 @@ public class HomeFragment extends Fragment {
                                 categoryAdapter.notifyDataSetChanged();
                             }
                         } else {
+                            Toast.makeText(getActivity(),""+ task.getException(),Toast.LENGTH_SHORT);
 
                         }
                     }
                 });
+
+        //new Product
+        newProductRecyclerview.setLayoutManager(new LinearLayoutManager(getActivity(),RecyclerView.HORIZONTAL,false));
+
+        newProductsModelList = new ArrayList<>();
+
+        newProductsAdapter = new NewProductsAdapter(getContext(),newProductsModelList);
+        newProductRecyclerview.setAdapter(newProductsAdapter);
+
+        db.collection("NewProduct")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                              NewProductsModel newProductsModel = document.toObject(NewProductsModel.class);
+                                newProductsModelList.add(newProductsModel);
+                                newProductsAdapter.notifyDataSetChanged();
+                            }
+                        } else {
+
+                            Toast.makeText(getActivity(),""+ task.getException(),Toast.LENGTH_SHORT);
+
+                        }
+                    }
+                });
+
 
         return  root;
     }
