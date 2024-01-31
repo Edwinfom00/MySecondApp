@@ -52,6 +52,7 @@ public class OnBoardingActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                
                 startActivity(new Intent(OnBoardingActivity.this,RegistrationActivity.class));
                 finish();
             }
@@ -91,7 +92,7 @@ public class OnBoardingActivity extends AppCompatActivity {
                 btn.setVisibility(View.INVISIBLE);
             }else  if(position == 1){
                 btn.setVisibility(View.INVISIBLE);
-            }else{
+            }else if(position == 2){
                 animation = AnimationUtils.loadAnimation(OnBoardingActivity.this,R.anim.slide_animation);
                 btn.setAnimation(animation);
                 btn.setVisibility(View.VISIBLE);
